@@ -1,4 +1,4 @@
-import { defineRpcContract } from "@get-bb/plugin-sdk";
+import type { defineRpcContract } from "@get-bb/plugin-sdk";
 import {
   UrlLink,
   definePluginApp,
@@ -12,7 +12,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils";
 import { chip, type PullRequest, type Signal, type Tone } from "./pull-request";
 
-const githubPrStatus = defineRpcContract({
+// A git install builds without devDependencies, so only the app entry, which bb provides, resolves at runtime.
+const defineContract = ((contract: unknown) => contract) as typeof defineRpcContract;
+
+const githubPrStatus = defineContract({
   pullRequests: {
     input: z.object({ keys: z.array(z.string()) }),
     output: z.record(
