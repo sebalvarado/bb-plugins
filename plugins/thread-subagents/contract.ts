@@ -12,7 +12,7 @@ const messageSchema = z.object({ sentAt: z.string().nullable(), text: z.string()
 const cardSchema = z.object({
   id: z.string(),
   title: z.string(),
-  state: z.enum(["running", "finished", "stalled"]),
+  state: z.enum(["running", "finished", "stalled", "stopped"]),
   source: z.enum(["transcript", "delegation"]),
   launchedAt: z.number().nullable(),
   lastStepAt: z.number().nullable(),

@@ -74,6 +74,7 @@ const STATE_STYLE: Record<Card["state"], string> = {
   running: "bg-success-foreground",
   stalled: "bg-attention",
   finished: "bg-muted-foreground",
+  stopped: "bg-muted-foreground",
 };
 
 function SubagentsChip({ threadId }: ExperimentalThreadContextSegmentInput) {
@@ -169,11 +170,25 @@ function SubagentsTab({ threadId }: ExperimentalThreadTabProps) {
   if (isLoading) return <p className="p-3 text-sm text-muted-foreground">Loading subagents…</p>;
   if (error && !data) return <p className="p-3 text-sm text-destructive">Could not read subagents: {error.message}</p>;
   if (!data || data.cards.length === 0) return <p className="p-3 text-sm text-muted-foreground">This thread has run no subagents.</p>;
+  const current = data.cards.filter((card) => card.state !== "stopped");
+  const stopped = data.cards.filter((card) => card.state === "stopped");
   return (
     <div className="grid gap-3 p-3">
-      {data.cards.map((card) => (
+      {current.map((card) => (
         <SubagentCard key={card.id} card={card} now={now} />
       ))}
+      {stopped.length > 0 ? (
+        <details className="grid gap-3">
+          <summary className="cursor-pointer text-xs text-muted-foreground">
+            Stopped ({stopped.length}): no step for a day and no final report
+          </summary>
+          <div className="mt-3 grid gap-3">
+            {stopped.map((card) => (
+              <SubagentCard key={card.id} card={card} now={now} />
+            ))}
+          </div>
+        </details>
+      ) : null}
     </div>
   );
 }

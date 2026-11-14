@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   RUNNING_WINDOW_MS,
+  STOPPED_AFTER_MS,
   agentIdFromFileName,
   delegationTitle,
   describeTool,
@@ -58,6 +59,13 @@ test("an unfinished transcript is running while its file changed in the window, 
   const modifiedAt = 1_000_000;
   assert.equal(stateOf(false, modifiedAt, modifiedAt + RUNNING_WINDOW_MS), "running");
   assert.equal(stateOf(false, modifiedAt, modifiedAt + RUNNING_WINDOW_MS + 1), "stalled");
+});
+
+test("an unfinished transcript with no step for a day is stopped, while a finished one stays finished", () => {
+  const modifiedAt = 1_000_000;
+  assert.equal(stateOf(false, modifiedAt, modifiedAt + STOPPED_AFTER_MS), "stalled");
+  assert.equal(stateOf(false, modifiedAt, modifiedAt + STOPPED_AFTER_MS + 1), "stopped");
+  assert.equal(stateOf(true, modifiedAt, modifiedAt + 10 * STOPPED_AFTER_MS), "finished");
 });
 
 test("a last line that is a user message or carries a tool call is not finished", () => {

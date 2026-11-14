@@ -3,7 +3,7 @@ See what a thread's subagents are doing, and notice when one stalls.
 ## What you get
 
 - A **Subagents** tab beside a thread that has run subagents: one card per
-  subagent with its title, its state (running, stalled or finished), the time
+  subagent with its title, its state (running, stalled, finished or stopped), the time
   since its last step, the initial prompt (collapsed), every follow-up
   instruction, the last steps it took and its final report.
 - A chip above the composer while subagents run or stall, such as
@@ -19,8 +19,10 @@ its title. This plugin reads the transcripts Cursor writes for each subagent
 of the thread's conversation, read only:
 
 - A subagent is **finished** when its last message is a reply with no tool
-  call, **running** when its transcript changed in the last 3 minutes, and
-  **stalled** otherwise.
+  call, **running** when its transcript changed in the last 3 minutes,
+  **stalled** when it last changed within a day, and **stopped** after that.
+  Stopped subagents sit in a collapsed group at the end of the tab, and the
+  chip and the sidebar count only running and stalled ones.
 - Its title comes from the task bb recorded when it launched; a subagent with
   no matching task is titled from the first line of its prompt.
 - Prompts and reports show as plain text.

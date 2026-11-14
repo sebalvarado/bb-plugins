@@ -1,8 +1,9 @@
 export const RUNNING_WINDOW_MS = 3 * 60_000;
+export const STOPPED_AFTER_MS = 24 * 60 * 60_000;
 export const MATCH_WINDOW_MS = 60_000;
 export const LAST_STEPS = 8;
 
-export type State = "running" | "finished" | "stalled";
+export type State = "running" | "finished" | "stalled" | "stopped";
 
 export interface ToolCall {
   name: string;
@@ -108,7 +109,9 @@ export function finishedFromTail(tail: string, fromStart: boolean): boolean | nu
 
 export function stateOf(finished: boolean, modifiedAt: number, now: number): State {
   if (finished) return "finished";
-  return now - modifiedAt <= RUNNING_WINDOW_MS ? "running" : "stalled";
+  const idle = now - modifiedAt;
+  if (idle <= RUNNING_WINDOW_MS) return "running";
+  return idle <= STOPPED_AFTER_MS ? "stalled" : "stopped";
 }
 
 export function userMessage(text: string): Message {

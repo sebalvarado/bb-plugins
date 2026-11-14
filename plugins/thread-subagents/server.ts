@@ -202,7 +202,7 @@ export default function plugin(bb: BbPluginApi) {
         report: transcript.report,
       });
     }
-    const rank = { running: 0, stalled: 1, finished: 2 } as const;
+    const rank = { running: 0, stalled: 1, finished: 2, stopped: 3 } as const;
     cards.sort((a, b) => rank[a.state] - rank[b.state] || (b.launchedAt ?? 0) - (a.launchedAt ?? 0));
     return { cards, transcripts: true };
   }
