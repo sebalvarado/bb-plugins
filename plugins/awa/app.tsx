@@ -261,7 +261,7 @@ function LifecycleSection({ item, fields, project }: { item: Item; fields: Field
     setNotice(null);
     refresh();
   }, [refresh]);
-  useRealtime("github-projects-lifecycle", (payload) => {
+  useRealtime("awa-lifecycle", (payload) => {
     if ((payload as { ref?: string } | null)?.ref?.toLowerCase() === ref(repo, number).toLowerCase()) refresh();
   });
 
@@ -681,7 +681,7 @@ function ProjectsPage() {
     else fetchBoard(false);
   }, [source]);
 
-  useRealtime("github-projects-changed", () => {
+  useRealtime("awa-changed", () => {
     if (board !== null) refreshAgents(board.items);
   });
 
@@ -1148,10 +1148,10 @@ function Table({
 
 export default definePluginApp((app) => {
   app.slots.navPanel({
-    id: "github-projects",
-    title: "GitHub Projects",
+    id: "awa",
+    title: "Awa",
     icon: "Columns2",
-    path: "github-projects",
+    path: "awa",
     component: ProjectsPage,
   });
 });

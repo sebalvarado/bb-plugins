@@ -35,7 +35,7 @@ export interface Deps {
   models: () => Promise<{ reviewer: { providerId?: string; model?: string }; implementer: { providerId?: string; model?: string } }>;
 }
 
-export const RUN_CHANGED = "github-projects-lifecycle";
+export const RUN_CHANGED = "awa-lifecycle";
 
 const SET_OPTION = `mutation($project: ID!, $item: ID!, $field: ID!, $option: String!) {
   updateProjectV2ItemFieldValue(input: { projectId: $project, itemId: $item, fieldId: $field, value: { singleSelectOptionId: $option } }) { projectV2Item { id } }
@@ -102,7 +102,7 @@ export function createEngine(deps: Deps) {
   async function mirror(def: Lifecycle, run: Run): Promise<string | null> {
     if (run.projectId === null || run.itemId === null) return null;
     const field = (await deps.fields(run.projectId)).find((f) => f.name === def.field && f.kind === "single_select");
-    if (field === undefined) return `The project has no ${def.field} field yet; run bb github-projects lifecycle setup on it`;
+    if (field === undefined) return `The project has no ${def.field} field yet; run bb awa lifecycle setup on it`;
     const name = stageName(def, run.stage);
     const option = field.options.find((o) => o.name === name);
     if (option === undefined) return `The ${def.field} field has no "${name}" option`;

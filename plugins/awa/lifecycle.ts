@@ -237,9 +237,9 @@ export function stagePrompt(def: Lifecycle, run: Run, s: Stage, note: string): s
   lines.push(
     "",
     "When this stage is finished, report it, and the lifecycle hands on the next one:",
-    `  bb github-projects stage done ${run.ref} --summary "<what you did, in a sentence or two>"${flags}`,
+    `  bb awa stage done ${run.ref} --summary "<what you did, in a sentence or two>"${flags}`,
     "If you cannot go on without the maintainer, say why instead:",
-    `  bb github-projects stage blocked ${run.ref} --reason "<what you need>"`,
+    `  bb awa stage blocked ${run.ref} --reason "<what you need>"`,
   );
   return lines.join("\n");
 }
