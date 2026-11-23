@@ -202,10 +202,10 @@ test("an issue reference reads as owner/repo#n or as its GitHub URL", () => {
 });
 
 test("a new agent is told the board position, the parent epic and the work already open", () => {
-  const prompt = startPrompt(issue(), { title: "Veinte" });
+  const prompt = startPrompt(issue(), { title: "Acme" });
   assert.match(prompt, /^Work on GitHub issue example\/repo#12: Pay by llave/);
   assert.match(prompt, /gh issue view 12 -R example\/repo --comments/);
-  assert.match(prompt, /"Veinte" project board it is at Status: Ready, Epic: Move money/);
+  assert.match(prompt, /"Acme" project board it is at Status: Ready, Epic: Move money/);
   assert.match(prompt, /belongs to example\/repo#3: Epic: Move money/);
   assert.match(prompt, /pull request #40 \(draft\) on branch epic-3-move-money/);
   assert.match(prompt, /The payer types a llave\./);
@@ -225,16 +225,16 @@ test("a new agent gets its own worktree, started from the open pull request's br
 });
 
 test("a thread is filed under its issue's epic: the board's Epic field, else the parent epic, else itself when it is one", () => {
-  assert.equal(streamFromTitle("Epic: Operate the day — Veinte Desk, the integrante's console"), "Operate the day");
+  assert.equal(streamFromTitle("Epic: Operate the day — the support console"), "Operate the day");
   assert.equal(streamFromTitle("epic: Llaves - the directory as a product"), "Llaves");
   assert.equal(streamFromTitle("Pay by llave"), null);
   assert.equal(streamOf(issue()), "Move money");
   const noField = { ...issue(), fields: {} };
   assert.equal(streamOf(noField), "Move money");
-  assert.equal(streamOf({ ...noField, parent: null, subIssues: { total: 2, completed: 0 }, title: "Epic: Run the red — Veinte Tower" }), "Run the red");
+  assert.equal(streamOf({ ...noField, parent: null, subIssues: { total: 2, completed: 0 }, title: "Epic: Run the network — the control tower" }), "Run the network");
   assert.equal(streamOf({ ...noField, parent: null, subIssues: null }), null);
   assert.equal(threadTitle(issue()), "#12 Pay by llave");
-  assert.equal(sectionName("veinte", "Go live with the BCE"), "veinte · Go live with the BCE");
+  assert.equal(sectionName("acme", "Go live"), "acme · Go live");
 });
 
 test("a long description is cut so the prompt stays bounded", () => {

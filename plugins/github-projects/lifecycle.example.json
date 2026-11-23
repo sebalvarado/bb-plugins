@@ -1,0 +1,89 @@
+{
+  "about": "How a parent issue (an epic, or any issue with sub-issues) moves from triage to merge with agents. Copy this file to your repository's .bb/lifecycle.json and change the instructions to name your own skills and checks. The github-projects bb plugin mirrors the stage into the board's Stage field and hands each stage to the right thread. Rolling out and Monitoring are off until you have a deployment environment: to turn them on, enable them and give Merged the kind work.",
+  "field": "Stage",
+  "needsYou": "Needs you",
+  "reviewRounds": 3,
+  "workspace": "worktree",
+  "parentsOnly": true,
+  "stages": [
+    {
+      "id": "triage",
+      "name": "Triage",
+      "kind": "work",
+      "actor": "implementer",
+      "instructions": "Triage this parent issue. Read it, its sub-issues and their comments. Check that it is defined well enough to plan: an end state, acceptance criteria, nothing it waits on that is still open. Comment a short triage on the issue: what is left to build, its size (S, M, L or XL), what it depends on, and any question only the maintainer can answer. If it is not ready to plan, report blocked with that question instead."
+    },
+    {
+      "id": "plan",
+      "name": "Plan",
+      "kind": "work",
+      "actor": "implementer",
+      "instructions": "Plan the work. Comment the plan on the issue: the slices in order, each with the acceptance-criteria lines it finishes, the tests that prove it, and the branch it is built on. Name every assumption and every open decision. Change no code in this stage."
+    },
+    {
+      "id": "plan-approval",
+      "name": "Plan approval",
+      "kind": "gate",
+      "actor": "you",
+      "sendBackTo": "plan"
+    },
+    {
+      "id": "build",
+      "name": "Build",
+      "kind": "work",
+      "actor": "implementer",
+      "instructions": "Build the approved plan, slice by slice, in this worktree. Follow the repository's AGENTS.md. Write each slice's test first. Before reporting, run the repository's full checks and push the branch."
+    },
+    {
+      "id": "pull-request",
+      "name": "Pull request",
+      "kind": "work",
+      "actor": "implementer",
+      "requires": "pull-request",
+      "instructions": "Open the pull request into the default branch, or push to the one already open, as epic-tracking and pr-description-writer say if the repository has those skills: what it does, the parent issue, the acceptance criteria it meets with their evidence, and every assumption. Keep it a draft until its checks pass, then mark it ready. Report it once it is ready and its checks pass."
+    },
+    {
+      "id": "review",
+      "name": "Review",
+      "kind": "review",
+      "actor": "reviewer",
+      "instructions": "You are the reviewer, not the author: change no code, push nothing, merge nothing. Review the whole pull request for five things: bugs and incorrect behaviour, security risks, poor performance, poor design, and whether it does what the issue and its plan ask, working end to end. Check out its branch and run what you need to be sure. Post your findings as one pull request review, each labelled must, should or nit, with its file and line and what to change. On later rounds, check first that each earlier finding was fixed. Anything out of scope becomes an issue, not a finding."
+    },
+    {
+      "id": "address",
+      "name": "Address review",
+      "kind": "address",
+      "actor": "implementer",
+      "instructions": "Read the latest review on the pull request. Fix every must and should finding, each in its own commit, with no force-push; fix a nit when it is cheap. Answer each finding on the pull request with the commit that fixes it, or why it should not change. Run the repository's checks, push, and report once they pass."
+    },
+    {
+      "id": "ready-to-merge",
+      "name": "Ready to merge",
+      "kind": "gate",
+      "actor": "you",
+      "requires": "merged",
+      "sendBackTo": "address"
+    },
+    {
+      "id": "merged",
+      "name": "Merged",
+      "kind": "end"
+    },
+    {
+      "id": "rolling-out",
+      "name": "Rolling out",
+      "kind": "work",
+      "actor": "implementer",
+      "enabled": false,
+      "instructions": "Watch the rollout of the merged change in each environment until it is live everywhere it is meant to be."
+    },
+    {
+      "id": "monitoring",
+      "name": "Monitoring",
+      "kind": "work",
+      "actor": "implementer",
+      "enabled": false,
+      "instructions": "Watch the change running: errors, latency and throughput. Open an issue for anything that regressed."
+    }
+  ]
+}

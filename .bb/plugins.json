@@ -1,0 +1,10 @@
+{
+  "$schema": "https://getbb.app/schemas/plugins.schema.json",
+  "schemaVersion": 1,
+  "name": "sebalvarado-plugins",
+  "plugins": [
+    { "name": "github-projects", "source": "./plugins/github-projects" },
+    { "name": "thread-pull-request", "source": "./plugins/thread-pull-request" },
+    { "name": "thread-subagents", "source": "./plugins/thread-subagents" }
+  ]
+}

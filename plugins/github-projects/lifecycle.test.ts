@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { NEEDS_YOU, begin, boardOptions, checks, enabled, parseLifecycle, stage, stagePrompt, transition, type Event, type Run } from "./lifecycle.ts";
 
-const def = parseLifecycle(readFileSync(new URL("../../.bb/lifecycle.json", import.meta.url), "utf8"));
+const def = parseLifecycle(readFileSync(new URL("./lifecycle.example.json", import.meta.url), "utf8"));
 const NOW = "2026-11-14T05:00:00.000Z";
 
 function started(): Run {
