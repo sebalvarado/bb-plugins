@@ -1,5 +1,5 @@
 {
-  "name": "bb-plugin-github-projects",
+  "name": "bb-plugin-awa",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -14,8 +14,8 @@
     "bbPluginSdk": ">=0.6.104"
   },
   "bb": {
-    "name": "GitHub Projects",
-    "description": "Your GitHub Projects as boards and tables you can filter, with each issue handed to an agent or continued by the one that worked it.",
+    "name": "Awa",
+    "description": "Run agents from your GitHub Projects: hand each issue to an agent, and take a parent issue from triage to a pull request you merge.",
     "branding": {
       "icon": "Columns2"
     },

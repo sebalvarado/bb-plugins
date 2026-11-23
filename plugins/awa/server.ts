@@ -146,7 +146,7 @@ export const rpcContract = defineRpcContract({
   continue: { input: z.object({ targets: z.array(targetSchema).min(1).max(10) }), output: z.object({ outcomes: z.array(outcomeSchema) }) },
 });
 
-export const CHANGED = "github-projects-changed";
+export const CHANGED = "awa-changed";
 const MAX_PAGES = 10;
 const PROJECT_TTL_MS = 2 * 60_000;
 const LIST_TTL_MS = 5 * 60_000;
@@ -747,25 +747,25 @@ export default async function plugin(bb: BbPluginApi) {
 
   const usage = [
     "Usage:",
-    "  bb github-projects projects [--json]                         every GitHub Project this login can see",
-    '  bb github-projects items <project> [--filter "<query>"] [--json]  a project\'s items, filtered',
-    "  bb github-projects continue <owner/repo#n>... [--project <project>] [--worktree|--checkout] [--json]",
+    "  bb awa projects [--json]                         every GitHub Project this login can see",
+    '  bb awa items <project> [--filter "<query>"] [--json]  a project\'s items, filtered',
+    "  bb awa continue <owner/repo#n>... [--project <project>] [--worktree|--checkout] [--json]",
     "                                                               hand issues to agents: continue the thread that worked",
     "                                                               each one, or start one in a new worktree (--checkout:",
     "                                                               the main checkout), and move it to In progress",
-    "  bb github-projects organize [--dry-run] [--json]             file the threads this plugin started in a section per epic",
+    "  bb awa organize [--dry-run] [--json]             file the threads this plugin started in a section per epic",
     "",
     "The lifecycle of a parent issue, defined in the repository's .bb/lifecycle.json:",
-    "  bb github-projects lifecycle setup <project>        add the Stage field to a project's board",
-    "  bb github-projects stage list                       every issue in the lifecycle and its stage",
-    "  bb github-projects stage show <owner/repo#n>        one issue's stage, threads and history",
-    "  bb github-projects stage start <owner/repo#n> [--project <project>]",
-    '  bb github-projects stage done <owner/repo#n> --summary "<text>" [--pr <n>] [--must <n>]   an agent finished its stage',
-    '  bb github-projects stage blocked <owner/repo#n> --reason "<text>"                        an agent needs the maintainer',
-    '  bb github-projects stage approve <owner/repo#n> [--note "<text>"]                       the maintainer passes a gate',
-    '  bb github-projects stage back <owner/repo#n> --note "<what to change>"                  the maintainer sends it back',
-    '  bb github-projects stage resume <owner/repo#n> [--to <stage id>] [--note "<text>"]',
-    "  bb github-projects stage stop <owner/repo#n>",
+    "  bb awa lifecycle setup <project>        add the Stage field to a project's board",
+    "  bb awa stage list                       every issue in the lifecycle and its stage",
+    "  bb awa stage show <owner/repo#n>        one issue's stage, threads and history",
+    "  bb awa stage start <owner/repo#n> [--project <project>]",
+    '  bb awa stage done <owner/repo#n> --summary "<text>" [--pr <n>] [--must <n>]   an agent finished its stage',
+    '  bb awa stage blocked <owner/repo#n> --reason "<text>"                        an agent needs the maintainer',
+    '  bb awa stage approve <owner/repo#n> [--note "<text>"]                       the maintainer passes a gate',
+    '  bb awa stage back <owner/repo#n> --note "<what to change>"                  the maintainer sends it back',
+    '  bb awa stage resume <owner/repo#n> [--to <stage id>] [--note "<text>"]',
+    "  bb awa stage stop <owner/repo#n>",
     "",
     "<project> is a number (owner/number when two owners share it), or part of the title.",
     'A filter is free text plus qualifiers: status:ready epic:"move money" label:bug assignee:@me is:open has:agent no:assignee -label:epic',
@@ -788,15 +788,15 @@ export default async function plugin(bb: BbPluginApi) {
   }
 
   bb.cli.register({
-    name: "github-projects",
-    summary: "Browse GitHub Projects and hand their issues to agents",
+    name: "awa",
+    summary: "Run agents from GitHub Projects: hand issues to agents and move epics through their lifecycle",
     commands: [
-      { name: "projects", summary: "List every GitHub Project this login can see", usage: "bb github-projects projects [--json]" },
-      { name: "items", summary: "List a project's items, filtered", usage: 'bb github-projects items <project> [--filter "<query>"] [--json]' },
-      { name: "continue", summary: "Continue or start an agent on each issue", usage: "bb github-projects continue <owner/repo#n>... [--project <project>] [--worktree|--checkout] [--json]" },
-      { name: "stage", summary: "Move a parent issue through its lifecycle", usage: "bb github-projects stage <list|show|start|done|blocked|approve|back|resume|stop> [<owner/repo#n>] [options] [--json]" },
-      { name: "organize", summary: "File this plugin's threads in a section per epic", usage: "bb github-projects organize [--dry-run] [--json]" },
-      { name: "lifecycle", summary: "Add the lifecycle's Stage field to a project", usage: "bb github-projects lifecycle setup <project> [--json]" },
+      { name: "projects", summary: "List every GitHub Project this login can see", usage: "bb awa projects [--json]" },
+      { name: "items", summary: "List a project's items, filtered", usage: 'bb awa items <project> [--filter "<query>"] [--json]' },
+      { name: "continue", summary: "Continue or start an agent on each issue", usage: "bb awa continue <owner/repo#n>... [--project <project>] [--worktree|--checkout] [--json]" },
+      { name: "stage", summary: "Move a parent issue through its lifecycle", usage: "bb awa stage <list|show|start|done|blocked|approve|back|resume|stop> [<owner/repo#n>] [options] [--json]" },
+      { name: "organize", summary: "File this plugin's threads in a section per epic", usage: "bb awa organize [--dry-run] [--json]" },
+      { name: "lifecycle", summary: "Add the lifecycle's Stage field to a project", usage: "bb awa lifecycle setup <project> [--json]" },
     ],
     async run(argv, ctx) {
       const json = argv.includes("--json");

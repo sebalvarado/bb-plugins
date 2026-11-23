@@ -1,5 +1,5 @@
 {
-  "about": "How a parent issue (an epic, or any issue with sub-issues) moves from triage to merge with agents. Copy this file to your repository's .bb/lifecycle.json and change the instructions to name your own skills and checks. The github-projects bb plugin mirrors the stage into the board's Stage field and hands each stage to the right thread. Rolling out and Monitoring are off until you have a deployment environment: to turn them on, enable them and give Merged the kind work.",
+  "about": "How a parent issue (an epic, or any issue with sub-issues) moves from triage to merge with agents. Copy this file to your repository's .bb/lifecycle.json and change the instructions to name your own skills and checks. Awa mirrors the stage into the board's Stage field and hands each stage to the right thread. Rolling out and Monitoring are off until you have a deployment environment: to turn them on, enable them and give Merged the kind work.",
   "field": "Stage",
   "needsYou": "Needs you",
   "reviewRounds": 3,
